@@ -37,7 +37,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="type.ttf">
+    <Font Include="Resources\type.ttf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>

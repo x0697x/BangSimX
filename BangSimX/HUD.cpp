@@ -1,42 +1,49 @@
 #include "HUD.h"
 #include <iostream>
 
-HUD::HUD() : fontLoaded(false), text(font) {
-    // Attempting to load directly from the root project folder
-    if (font.openFromFile("type.ttf")) {
+HUD::HUD() : fontLoaded(false), text(font), endText(font) {
+    if (font.openFromFile("Resources/type.ttf")) {
         fontLoaded = true;
         text.setFont(font);
         text.setCharacterSize(18);
-        text.setFillColor(sf::Color::Cyan);
+        text.setFillColor(sf::Color::White);
         text.setPosition({ 20.f, 20.f });
-        std::cout << "HUD: Font loaded successfully from project root." << std::endl;
-    }
-    else {
-        // If this fails, the update() and draw() functions will skip silently instead of crashing
-        std::cerr << "HUD Error: Could not find type.ttf in the project folder!" << std::endl;
+
+        endText.setFont(font);
+        endText.setCharacterSize(80);
+        endText.setFillColor(sf::Color::Red);
+        endText.setString("THE END");
+
+        sf::FloatRect textBounds = endText.getLocalBounds();
+        endText.setOrigin({
+            textBounds.position.x + textBounds.size.x / 2.0f,
+            textBounds.position.y + textBounds.size.y / 2.0f
+            });
     }
 }
 
-void HUD::update(int fps, float time, float speedMult, size_t particleCount) {
-    if (!fontLoaded) return; // Prevent crashes if font is missing
-
-    std::string speedStr = (speedMult < 0.5f) ? "Slow" : (speedMult > 1.5f) ? "Fast" : "Normal";
+void HUD::update(int fps, float time, float speedMult, size_t particleCount, bool isPaused) {
+    if (!fontLoaded) return;
+    std::string speedStr = isPaused ? "PAUSED" : (speedMult < 0.5f ? "Slow" : (speedMult > 1.5f ? "Fast" : "Normal"));
 
     text.setString(
         "FPS: " + std::to_string(fps) +
         "\nTime: " + std::to_string((int)time) + "s" +
         "\nSpeed: " + speedStr +
         "\nParticles: " + std::to_string(particleCount) +
-        "\nPress 'R' to Reset"
+        "\n[Space] Pause | [1-3] Speed | [R] Reset" + // Instructions added back
+        "\n[Esc] Exit"
     );
 }
 
 void HUD::draw(sf::RenderWindow& window) {
-    if (!fontLoaded) return; // Skip drawing if font failed to load
-
+    if (!fontLoaded) return;
     sf::View oldView = window.getView();
-    // Overlay view for the UI
     window.setView(sf::View(sf::FloatRect({ 0.f, 0.f }, sf::Vector2f(window.getSize()))));
     window.draw(text);
+    if (isEnding) {
+        endText.setPosition(sf::Vector2f(window.getSize()) / 2.0f);
+        window.draw(endText);
+    }
     window.setView(oldView);
 }

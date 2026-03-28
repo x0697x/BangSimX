@@ -12,7 +12,13 @@ void Particle::update(float dt) {
     if (spawnTimer > 0) spawnTimer -= dt;
     position += velocity * dt;
     shape.setPosition(position);
-    velocity *= 0.997f;
+
+    if (isBlackHole) {
+        velocity *= 0.9995f; // Slight orbital decay to keep them centered
+    }
+    else {
+        velocity *= 0.997f;
+    }
 }
 
 void Particle::draw(sf::RenderWindow& window) { window.draw(shape); }
@@ -25,10 +31,13 @@ void Particle::grow(float otherMass) {
         float newRadius = 1.5f + std::log10(mass + 1.0f) * 3.5f;
         shape.setRadius(newRadius);
         shape.setOrigin({ newRadius, newRadius });
-        if (mass > 40.0f)  shape.setFillColor(sf::Color(255, 240, 150));
-        if (mass > 250.0f) shape.setFillColor(sf::Color(255, 100, 50));
+
+        if (mass > 40.0f)  shape.setFillColor(sf::Color::White);
+        if (mass > 250.0f) shape.setFillColor(sf::Color(255, 165, 0));
+
         if (mass > 1200.0f) {
             isBlackHole = true;
+            mass *= 1.8f; // Stronger mass boost for stabilization
             shape.setFillColor(sf::Color::Black);
             shape.setOutlineThickness(2.0f);
             shape.setOutlineColor(sf::Color::White);
