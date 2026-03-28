@@ -33,6 +33,7 @@ void HUD::update(int fps, float time, float speedMult, size_t particleCount, boo
         "\nParticles: " + std::to_string(particleCount) +
         "\n[Space] Pause | [1-3] Speed | [R] Reset" + // Instructions added back
         "\n[Esc] Exit"
+        "\n\n Made by x0697x"
     );
 }
 

@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="BangSimX/BangSimX.vcxproj" />
+  <Project Path="BangSimX/BangSimX.vcxproj" Id="253ca163-a8df-413c-85c9-04cfc354b856" />
 </Solution>
