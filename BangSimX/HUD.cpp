@@ -29,7 +29,7 @@ HUD::HUD() : fontLoaded(false), text(font), endText(font) {
     }
 }
 
-float appVersion = 0.6f;
+float appVersion = 1.0f;
 
 void HUD::update(int fps, float time, float speedMult, size_t particleCount, bool isPaused) {
     if (!fontLoaded) return;
